@@ -135,13 +135,26 @@ class UserController extends Controller
 
         return view('/user/blade/user-detail/user-detail');
     }
+
+    /**
+     * Lấy ra các vé đã mua
+     */
     public function getBuyHistory()
     {
         $data=[];
-        $eventBought=User::where('id',Auth::user()->id+1)->first()->booking()->get();
-        dd($eventBought);
+        $bookings=User::find(Auth::user()->id)->bookings()->get();
+        foreach($bookings as $booking)
+        {
+            $attendees= $booking->attendees()->get();
+            foreach($attendees as $attendee)
+            {
+                array_push($data, $attendee);
+            }
+            
+        }
+        // dd($data);
 
-        return view('/user/blade/user-detail/ticket-bought');
+        return view('/user/blade/user-detail/ticket-bought',compact("data",$data));
     }
     public function buyEventDetail($eventid)
     {

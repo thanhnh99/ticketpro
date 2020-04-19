@@ -28,6 +28,7 @@
 .main-events-bought .ticket-detail .event-detail
 {
     display: flex;
+    align-items: center;
 }
     .event-info
     {

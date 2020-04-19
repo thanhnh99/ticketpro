@@ -20,7 +20,7 @@
 <script src="/js/user/event-detail/main.js"></script>
 @endpush
 @section('content')
-<div class="container">
+<div class="container" >
 	<div class="hot-event">
 		<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
 		<ol class="carousel-indicators">
