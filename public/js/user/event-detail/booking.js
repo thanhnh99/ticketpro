@@ -66,7 +66,66 @@ function submitTicket()
 {
     var data = [];
     $("td[id*='number_of']").each(function (index) {
-        data.push({'ticket-class': $(this).attr('id').substring(5), 'quantity':$(this).html()})
+        data.push({'ticket-class': $(this).attr('id').substring(10), 'quantity':$(this).html()})
+    });
+    $.ajax({
+        url:  'validate-ticket',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: "POST",
+        data: JSON.stringify({'_token': $('meta[name="csrf-token"]').attr('content'), "tickets": data}),
+        cache: false,
+        contentType: 'application/json; charset=utf-8',
+        processData: false,
+        success: function (response)
+        {
+            console.log(response);
+            if(response.status=="auth")
+            {
+                alert("Bạn cần đăng nhập để tiếp tục");
+            }
+            window.location.href = response.redirectURL;
+        },
+        error: function(xhr, textStatus, errorThrown){
+            var err = JSON.parse(xhr.responseText);
+            alert("Không thành công. "+err.message);
+        }
     });
     console.log(data);
+}
+
+function validateOrder()
+{
+    var postData =[];
+    postData.push({
+        "username": $("#user_booking").val(),
+        "email": $("#mail_booking").val(),
+        "phone": $("#phone_booking").val(),
+    });
+    $.ajax({
+        url: "post-payment",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: "POST",
+        data: JSON.stringify({'_token': $('meta[name="csrf-token"]').attr('content'), "data": postData}),
+        cache: false,
+        contentType: 'application/json; charset=utf-8',
+        processData: false,
+        success: function (response)
+        {
+            console.log(response);
+            if(response.status=="auth")
+            {
+                alert("Bạn cần đăng nhập để tiếp tục");
+            }
+            window.location.href = response.redirectURL;
+        },
+        error: function(xhr, textStatus, errorThrown){
+            var err = JSON.parse(xhr.responseText);
+            alert("Không thành công. "+err.message);
+        }
+    });
+
 }

@@ -127,7 +127,7 @@ class UserController extends Controller
         $request->organizerAvatar->move(public_path('\uploads\organizer_avatars'), $organizerAvatar);
 
         Session::put('message','Tạo thành công');
-        return redirect(route('get_create_event'));
+        return redirect(route('event.create'));
     }
 
     public function getProfile()

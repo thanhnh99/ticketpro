@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="description" content="Evento -Event Html Template">
     <meta name="author" content="ColorLib">
+    <meta name="csrf-token" content="{{csrf_token()}}">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 @endpush
 @push('css')

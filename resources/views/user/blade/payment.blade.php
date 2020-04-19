@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{csrf_token()}}">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
@@ -16,6 +17,8 @@
 @endpush
 @push('scripts')
     <script src="/vnpay_php/assets/jquery-1.11.3.min.js"></script>
+    <script src="/js/user/event-detail/booking.js"></script>
+    <script src="/js/user/event-detail/main.js"></script>
 @endpush
 @section('content')
 <div class="container mgt140 mh673">
@@ -31,74 +34,38 @@
                 </tr>
             </thead>
             <tbody>
+            @foreach($order_session["tickets"] as $ticket)
                 <tr>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>@mdo</td>
+                    <td>{{$ticket["type"]}}</td>
+                    <td>{{$ticket["quantity"]}}</td>
+                    <td>{{$ticket["total_price"]/$ticket["quantity"]}}</td>
+                    <td>{{$ticket["total_price"]}}</td>
                 </tr>
-                <tr>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-                <td>@fat</td>
-                </tr>
-                <tr>
+            @endforeach
                 <td>Tổng tiền</td>
                 <td></td>
                 <td></td>
-                <td>500000000 VNĐ</td>
+                <td>{{$order_session["order_total"]}} VNĐ</td>
                 </tr>
             </tbody>
         </table>
     </div>
     <h3>Thông tin thanh toán và nhận vé</h3>
     <div class="table-responsive">
-        <form action="/vnpay_php/vnpay_create_payment.php" id="create_form" method="post">       
             <div class="form-group">
                 <label for="InputTen">Họ Tên</label>
-                <input type="text" class="form-control" placeholder="Nhập tên" name="booking_first_name">
+                <input id="user_booking" type="text" class="form-control" placeholder="Nhập tên">
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail1">Địa chỉ Email</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                <input id= "mail_booking" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
                     placeholder="Vé sẽ được chuyển về mail này. Vui lòng viết đúng Email" name="booking_email">
             </div>
             <div class="form-group">
                 <label for="InputTen">Số điện thoại</label>
-                <input type="text" class="form-control" placeholder="Nhập số điện thoại" name="booking_phone">
+                <input id = "phone_booking" type="text" class="form-control" placeholder="Nhập số điện thoại" name="booking_phone">
             </div>
-            <div class="form-group">
-                <label for="bank_code">Ngân hàng</label>
-                <select name="bank_code" id="bank_code" class="form-control">
-                    <option value="">Không chọn</option>
-                    <option value="NCB"> Ngan hang NCB</option>
-                    <option value="AGRIBANK"> Ngan hang Agribank</option>
-                    <option value="SCB"> Ngan hang SCB</option>
-                    <option value="SACOMBANK">Ngan hang SacomBank</option>
-                    <option value="EXIMBANK"> Ngan hang EximBank</option>
-                    <option value="MSBANK"> Ngan hang MSBANK</option>
-                    <option value="NAMABANK"> Ngan hang NamABank</option>
-                    <option value="VNMART"> Vi dien tu VnMart</option>
-                    <option value="VIETINBANK">Ngan hang Vietinbank</option>
-                    <option value="VIETCOMBANK"> Ngan hang VCB</option>
-                    <option value="HDBANK">Ngan hang HDBank</option>
-                    <option value="DONGABANK"> Ngan hang Dong A</option>
-                    <option value="TPBANK"> Ngân hàng TPBank</option>
-                    <option value="OJB"> Ngân hàng OceanBank</option>
-                    <option value="BIDV"> Ngân hàng BIDV</option>
-                    <option value="TECHCOMBANK"> Ngân hàng Techcombank</option>
-                    <option value="VPBANK"> Ngan hang VPBank</option>
-                    <option value="MBBANK"> Ngan hang MBBank</option>
-                    <option value="ACB"> Ngan hang ACB</option>
-                    <option value="OCB"> Ngan hang OCB</option>
-                    <option value="IVB"> Ngan hang IVB</option>
-                    <option value="VISA"> Thanh toan qua VISA/MASTER</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary" id="btnPopup">Thanh toán Popup</button>
-            <button type="submit" class="btn btn-default">Thanh toán Redirect</button>
-        </form>
+            <button id = "#btnVnpay" class="btn btn-default" onclick="validateOrder()">Thanh toán VNPay</button>
     </div>
     <p>
         &nbsp;
@@ -106,29 +73,4 @@
 </div>  
 <link href="https://sandbox.vnpayment.vn/paymentv2/lib/vnpay/vnpay.css" rel="stylesheet"/>
 <script src="https://sandbox.vnpayment.vn/paymentv2/lib/vnpay/vnpay.js"></script>
-<script type="text/javascript">
-    $("#btnPopup").click(function () {
-        var postData = $("#create_form").serialize();
-        var submitUrl = $("#create_form").attr("action");
-        $.ajax({
-            type: "POST",
-            url: submitUrl,
-            data: postData,
-            dataType: 'JSON',
-            success: function (x) {
-                if (x.code === '00') {
-                    if (window.vnpay) {
-                        vnpay.open({width: 768, height: 600, url: x.data});
-                    } else {
-                        location.href = x.data;
-                    }
-                    return false;
-                } else {
-                    alert(x.Message);
-                }
-            }
-        });
-        return false;
-    });
-</script>
 @endsection

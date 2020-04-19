@@ -21,12 +21,15 @@ Route::prefix('event')->group(function(){
     Route::get('/{eventId}','HomeController@getEventDetail')->name('event.detail');
     Route::prefix('{eventId}')->group(function(){
         Route::get('booking','HomeController@bookingDetail')->name('booking');
-        Route::get('checkout','BookingController@showSelectedTicket')->name('create_payment');
+        Route::post('validate-ticket',"BookingController@validateTicket")->name('validate-ticket');
+        Route::get('/create-payment','PaymentController@createPayment')->name('create_payment');
+        Route::post('/post-payment','PaymentController@postPayment')->name('post_payment');
+
     });
     
 });
 /**Login logout*/
-Route::get('/auth/redirect/{provider}', 'SocialController@redirect');
+Route::get('/auth/redirect/{provider}', 'SocialController@redirect')->name("login");
 Route::get('/callback/{provider}', 'SocialController@callback')->name('callbackLogin');
 Route::get('/logout','SocialController@logout')->name('logout');
 
@@ -42,6 +45,11 @@ Route::prefix('account/')->group(function (){
     Route::get('/event-buy-detail/{eventId}','UserController@getEventBuyDetail')->name('eventBuyDetail');
 
 });
+
+
+// Route::get('/create-payment','PaymentController@createPayment')->name('create_payment');
+// Route::post('/post-payment','PaymentController@postPayment')->name('post_payment');
+Route::get('/vnpay-return','PaymentController@vnpayReturn')->name('vnpay-return');
 
 // // Route::get('/event-detail/{eventId}','HomeController@getEventDetail')->name('event_detail');
 // Route::get('/event/all','HomeController@getAll')->name('all-event');
