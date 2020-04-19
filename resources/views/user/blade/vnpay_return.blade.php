@@ -1,52 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <title>VNPAY RESPONSE</title>
-        <!-- Bootstrap core CSS -->
-        <link href="/vnpay_php/assets/bootstrap.min.css" rel="stylesheet"/>
-        <!-- Custom styles for this template -->
-        <link href="/vnpay_php/assets/jumbotron-narrow.css" rel="stylesheet">         
-        <script src="/vnpay_php/assets/jquery-1.11.3.min.js"></script>
-    </head>
-    <body>
-        <?php
-        require_once("./config.php");
-        $vnp_SecureHash = $_GET['vnp_SecureHash'];
-        $inputData = array();
-        foreach ($_GET as $key => $value) {
-            if (substr($key, 0, 4) == "vnp_") {
-                $inputData[$key] = $value;
-            }
-        }
-        unset($inputData['vnp_SecureHashType']);
-        unset($inputData['vnp_SecureHash']);
-        ksort($inputData);
-        $i = 0;
-        $hashData = "";
-        foreach ($inputData as $key => $value) {
-            if ($i == 1) {
-                $hashData = $hashData . '&' . $key . "=" . $value;
-            } else {
-                $hashData = $hashData . $key . "=" . $value;
-                $i = 1;
-            }
-        }
+@extends('user.layout.master')
+@section('pageTitle', 'TicketPro')
+@push('css')
+<link href="/css/library/et-line.css" rel="stylesheet">
+<link href="/css/library/ionicons.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/user/main_styles.css">
+<link rel="stylesheet" href="/css/user/responsive.css">
+<link href="/css/user/event-detail/payment.css" rel="stylesheet"/>
+<link href="/vnpay_php/assets/bootstrap.min.css" rel="stylesheet"/>
+<!-- Custom styles for this template -->
+<link href="/vnpay_php/assets/jumbotron-narrow.css" rel="stylesheet">  
 
-        //$secureHash = md5($vnp_HashSecret . $hashData);
-		$secureHash = hash('sha256',$vnp_HashSecret . $hashData);
-        ?>
-        <!--Begin display -->
-        <div class="container">
-            <div class="header clearfix">
-                <h3 class="text-muted">VNPAY RESPONSE</h3>
-            </div>
+<style>
+    .jumbotron.text-center {
+    margin-top: 120px;
+}
+</style>
+
+@endpush
+@push('scripts')
+
+@endpush
+
+@section('content')
+    <?php
+    $vnp_TmnCode = "G2XY7630"; //Mã website tại VNPAY 
+    $vnp_HashSecret = "MNPSFPIMPREYRRIHARQAOEZYNGTMGLBI"; //Chuỗi bí mật
+    $vnp_Url = "http://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+    $vnp_Returnurl = "http://localhost/vnpay_php/vnpay_return.php";
+    $vnp_SecureHash = $_GET['vnp_SecureHash'];
+    $inputData = array();
+    foreach ($_GET as $key => $value) {
+        if (substr($key, 0, 4) == "vnp_") {
+            $inputData[$key] = $value;
+        }
+    }
+    unset($inputData['vnp_SecureHashType']);
+    unset($inputData['vnp_SecureHash']);
+    ksort($inputData);
+    $i = 0;
+    $hashData = "";
+    foreach ($inputData as $key => $value) {
+        if ($i == 1) {
+            $hashData = $hashData . '&' . $key . "=" . $value;
+        } else {
+            $hashData = $hashData . $key . "=" . $value;
+            $i = 1;
+        }
+    }
+
+    //$secureHash = md5($vnp_HashSecret . $hashData);
+    $secureHash = hash('sha256',$vnp_HashSecret . $hashData);
+    ?>
+    <!--Begin display -->
+    <div class="container" padding-top=100>
+        <div class="jumbotron text-center">
+            <h1 class="display-3">Cảm ơn bạn đã tin tưởng</h1>
+            <p class="lead"><strong>Thông tin đơn hàng của bạn</strong></p>
+            <hr>
             <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                        <th scope="col">Loại vé</th>
+                        <th scope="col">Mã vé</th>
+                        <th scope="col">Đơn giá</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($data["attendee"] as $ticket)
+                        <tr>
+                            <td>{{$ticket->ticketClass()->get()->first()->type}}</td>
+                            <td>{{$ticket->ticketCode}}</td>
+                            <td>{{$ticket->ticketClass()->get()->first()->price}} VNĐ</td>
+                        </tr>
+                    @endforeach
+                        <td>Tổng tiền</td>
+                        <td></td>
+                        <td>{{$_GET['vnp_Amount']}} VNĐ</td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div class="form-group">
                     <label >Mã đơn hàng:</label>
 
@@ -91,16 +124,12 @@
                             echo "Chu ky khong hop le";
                         }
                         ?>
-
                     </label>
                 </div> 
             </div>
-            <p>
-                &nbsp;
+            <p class="lead">
+                <a class="btn btn-primary btn-sm" href="{{Route('home')}}" role="button">Tiếp tục mua vé.</a>
             </p>
-            <footer class="footer">
-                <p>&copy; VNPAY 2015</p>
-            </footer>
-        </div>  
-    </body>
-</html>
+        </div>
+    </div>  
+@endsection

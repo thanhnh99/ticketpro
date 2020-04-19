@@ -174,51 +174,62 @@ class PaymentController extends Controller
                     $returnData['RspCode'] = '01';
                     $returnData['Message'] = 'Order not found';
                 }
-                    } else {
-                        $returnData['RspCode'] = '97';
-                        $returnData['Message'] = 'Chu ky khong hop le';
-                    }
-            } catch (Exception $e) {
-                $returnData['RspCode'] = '99';
-                $returnData['Message'] = 'Unknow error';
+            } else {
+                $returnData['RspCode'] = '97';
+                $returnData['Message'] = 'Chu ky khong hop le';
             }
-            //Trả lại VNPAY theo định dạng JSON
-            echo json_encode($returnData);
-            }
+        } catch (Exception $e) {
+            $returnData['RspCode'] = '99';
+            $returnData['Message'] = 'Unknow error';
+        }
+        //Trả lại VNPAY theo định dạng JSON
+        echo json_encode($returnData);
+    }
 
     public function vnpayReturn()
     {
+        $data=[];
+        $data["bookingDetail"]=[];
+        $data['attendee']=[];
         $booking = Booking::find($_GET['vnp_TxnRef']);
-        if($_GET['vnp_ResponseCode']=="00")
+        if($_GET['vnp_ResponseCode']=="00"&&$booking->status==0)
         {
             $booking->status=1;
             $booking->save();
+            $eventId =Session::get('eventId');
+            $order = session()->get('ticket_order_' . $eventId);
 
-        }
-        $eventId =Session::get('eventId');
-        $order = session()->get('ticket_order_' . $eventId);
+            foreach ($order['tickets'] as $ticket) {
+                $bookingDetail = new BookingDetail;
+                $bookingDetail->bookingId=$_GET['vnp_TxnRef'];
+                $bookingDetail->ticketClassId=$ticket["ticket_id"];
+                $bookingDetail->quantity=$ticket["quantity"];
+                $bookingDetail->save();
+                array_push($data["bookingDetail"],$bookingDetail);
+                for($i=0;$i<$ticket["quantity"];$i++)
+                {
+                    $attendee = new Attendee;
+                    $attendee->ticketCode = md5(rand()); 
+                    $attendee->bookingId = $_GET['vnp_TxnRef']; 
+                    $attendee->eventId = $booking->eventId; 
+                    $attendee->ticketClassId = $ticket["ticket_id"]; 
+                    $attendee->firstName = "Null";
+                    $attendee->lastName = "Null";
+                    $attendee->email = "Null";
+                    $attendee->pdfTicketPath = "Null";
+                    $attendee->save();
 
-        foreach ($order['tickets'] as $ticket) {
-            $bookingDetail = new BookingDetail;
-            $bookingDetail->bookingId=$_GET['vnp_TxnRef'];
-            $bookingDetail->ticketClassId=$ticket["ticket_id"];
-            $bookingDetail->quantity=$ticket["quantity"];
-            $bookingDetail->save();
-            for($i=0;$i<$ticket["quantity"];$i++)
-            {
-                $attendee = new Attendee;
-                $attendee->ticketCode = md5(rand()); 
-                $attendee->bookingId = $_GET['vnp_TxnRef']; 
-                $attendee->eventId = $booking->eventId; 
-                $attendee->ticketClassId = $ticket["ticket_id"]; 
-                $attendee->firstName = "Null";
-                $attendee->lastName = "Null";
-                $attendee->email = "Null";
-                $attendee->pdfTicketPath = "Null";
-                $attendee->save();
+                    array_push($data['attendee'],$attendee);
+                }
             }
+
         }
-        return view("vnpay.vnpay_return");
+        // dd($data);
+        foreach($data["attendee"] as $ticket)
+        // {
+        //     dd($ticket->booking()->get()->;
+        // }
+        return view("user.blade.vnpay_return",compact("data",$data));
     }
 
 }
