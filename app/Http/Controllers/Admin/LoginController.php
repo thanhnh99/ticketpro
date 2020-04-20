@@ -21,7 +21,7 @@ class LoginController extends Controller
      */
     public function login()
     {
-        return view('front-end.modules.signIn');
+        return view('admin.blade.login');
     }
 
 
@@ -33,18 +33,14 @@ class LoginController extends Controller
     public function loginAdmin(Request $request)
     {
         //validate dữ liệu
-        $this->validate($request,array(
-            'email'=>'required|email',
-            'password'=>'required|min:4'
-        ));
-
-        if(Auth::guard('admin')->attempt(
-            ['email'=>$request->email,'password'=>$request->password],$request->remember
+        if(!Auth::guard('admin')->attempt(
+            ['email'=>$request->email,'password'=>$request->password]
         ))
         {
             //nếu đăng nhập thành công sẽ chuyển về view dashboard của admin
             return redirect()->intended(route('admin.dashboard'));
         }
+        dd("Không thành công");
         //nếu đăng nhập thất bại thì quay trở về form đăng nhập.
         return redirect()->back()->withInput($request->only('email','remember'));
     }
