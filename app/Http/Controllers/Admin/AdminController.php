@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Model\AdminModel;
+use App\Event;
+use App\Booking;
 use Illuminate\Validation\Validator;
 class AdminController extends Controller
 {
@@ -58,5 +60,25 @@ class AdminController extends Controller
         $adminModel->password =bcrypt($request->password);
         $adminModel->save();
         return redirect()->route('admin.auth.login');
+    }
+
+
+    public function getListEvent()
+    {
+        $data=[];
+        $data=Event::all()->sortByDesc('created_at');
+        return view("admin.blade.listEvent",compact("data",$data));
+    }
+    
+    public function getListBooking()
+    {
+        $data=[];
+        $data=Booking::all()->sortByDesc('created_at');
+        return view("admin.blade.listBooking",compact("data",$data));
+    }
+
+    public function getBookingDetail()
+    {
+        
     }
 }

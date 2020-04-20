@@ -13,6 +13,11 @@
     <meta name="msapplication-tap-highlight" content="no">
 <link href="/css/user/user-detail/main.css" rel="stylesheet">
 <link href="/css/library/font-awesome.min.css" rel="stylesheet">
+<style>
+    th,td:hover {
+        cursor: pointer;}
+    }
+</style>
 @stack('css')
 </head>
 <body>
@@ -132,21 +137,15 @@
                                 </a>
                                 </li>
                                 <li>
-                                <a href="#">
+                                <a href="{{Route('admin.listEvent')}}">
                                     <i class="metismenu-icon pe-7s-ticket"></i>
-                                    <span class="app-sidebar__heading">Sự kiện đang bán</span>
+                                    <span class="app-sidebar__heading">Danh sách sự kiện</span>
                                 </a>
                                 </li>
                                 <li>
-                                <a href="#">
+                                <a href="{{Route('admin.listBooking')}}">
                                     <i class="metismenu-icon pe-7s-date"></i>
-                                    <span class="app-sidebar__heading">Sự kiện đã kết thúc</span>
-                                </a>
-                                </li>
-                                <li>
-                                <a href="#">
-                                    <i class="metismenu-icon pe-7s-culture"></i>
-                                    <span class="app-sidebar__heading">Thu nhập</span>
+                                    <span class="app-sidebar__heading">Danh sách booking</span>
                                 </a>
                                 </li>
                             </ul>
@@ -161,7 +160,7 @@
                 </div>
         </div>
     </div>   
-    <script type="text/javascript" src="/js/library/jquery.min.js"></script>
+    <!-- <script type="text/javascript" src="/js/library/jquery.min.js"></script> -->
     <script type="text/javascript" src="/js/user/user-detail/main.js"></script>
     @stack('scripts')
 </body>

@@ -84,18 +84,6 @@ Route::prefix('admin')->group(function(){
      */
     Route::get('/dashboard','Admin\AdminController@index')->name('admin.dashboard');
 
-    /**
-     *  URL: localhost/admin/register
-     * Route trả về view dùng để đăng kí tài khoản admin
-     */
-    Route::get('/register','Admin\AdminController@createAdmin')->name('admin.register');
-
-    /**
-     *  URL: localhost/admin/register
-     * Route dùng để đăng kí một admin từ form POST
-     */
-    Route::post('/register','Admin\AdminController@storeAdmin')->name('admin.store');
-
 
     /**
      *  URL: localhost/admin/login
@@ -115,6 +103,10 @@ Route::prefix('admin')->group(function(){
      * Route dùng để đăng xuất
      */
     Route::POST('/logout','Admin\LoginController@logout')->name('admin.auth.logout');
+
+    Route::get('/event-list',"Admin\AdminController@getListEvent")->name('admin.listEvent');
+    Route::get('/booking',"Admin\AdminController@getListBooking")->name('admin.listBooking');
+    Route::get('/booking/{bookingId}','@Admin\AdminController@getBookingDetail')->name('admin.bookingDetail');
 });
 
 
