@@ -64,6 +64,7 @@ function formatCurrency(num) {
 
 function submitTicket()
 {
+    $("#btn_submit").html('<div class="loading"><img style="height:27px"  src="/Images/loading.gif" alt=""></div>');
     var data = [];
     $("td[id*='number_of']").each(function (index) {
         data.push({'ticket-class': $(this).attr('id').substring(10), 'quantity':$(this).html()})
@@ -89,6 +90,7 @@ function submitTicket()
         },
         error: function(xhr, textStatus, errorThrown){
             var err = JSON.parse(xhr.responseText);
+            $("#btn_submit").html('<a>Tiếp tục</a> ');
             alert("Không thành công. "+err.message);
         }
     });
@@ -97,6 +99,7 @@ function submitTicket()
 
 function validateOrder()
 {
+    $("#btnVnpay").html('<div class="loading"><img style="height:27px"  src="/Images/loading.gif" alt=""></div>');
     var postData =[];
     postData.push({
         "username": $("#user_booking").val(),
@@ -124,6 +127,7 @@ function validateOrder()
         },
         error: function(xhr, textStatus, errorThrown){
             var err = JSON.parse(xhr.responseText);
+            $("#btnVnpay").html('Thanh toán VNPAY');
             alert("Không thành công. "+err.message);
         }
     });

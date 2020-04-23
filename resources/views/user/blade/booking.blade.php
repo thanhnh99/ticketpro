@@ -100,7 +100,7 @@
             </div>
         </div>       
         <div id = "btn_submit" onclick="submitTicket()" class="submit button" >
-            <!-- <a href="{{Route('create_payment',['eventId' => $data['event']->id])}}">Tiếp tục</a>  -->
+            <a>Tiếp tục</a> 
         </div>
     </div>
 </div>

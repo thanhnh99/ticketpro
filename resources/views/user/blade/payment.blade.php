@@ -54,18 +54,18 @@
     <div class="table-responsive">
             <div class="form-group">
                 <label for="InputTen">Họ Tên</label>
-                <input id="user_booking" type="text" class="form-control" placeholder="Nhập tên">
+                <input id="user_booking" type="text" class="form-control" placeholder="Nhập tên" require>
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail1">Địa chỉ Email</label>
                 <input id= "mail_booking" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                    placeholder="Vé sẽ được chuyển về mail này. Vui lòng viết đúng Email" name="booking_email">
+                    placeholder="Vé sẽ được chuyển về mail này. Vui lòng viết đúng Email" name="booking_email" require>
             </div>
             <div class="form-group">
                 <label for="InputTen">Số điện thoại</label>
-                <input id = "phone_booking" type="text" class="form-control" placeholder="Nhập số điện thoại" name="booking_phone">
+                <input id = "phone_booking" type="text" class="form-control" placeholder="Nhập số điện thoại" name="booking_phone" require>
             </div>
-            <button id = "#btnVnpay" class="btn btn-default" onclick="validateOrder()">Thanh toán VNPay</button>
+            <button id = "btnVnpay" type="button" class="btn btn-primary" onclick="validateOrder()">VNpay</button>
     </div>
     <p>
         &nbsp;
