@@ -10,6 +10,8 @@ use App\Attendee;
 use Auth;
 class PaymentController extends Controller
 {
+
+    
     //
     public $vnp_TmnCode = "G2XY7630"; //Mã website tại VNPAY 
     private $vnp_HashSecret = "MNPSFPIMPREYRRIHARQAOEZYNGTMGLBI"; //Chuỗi bí mật
