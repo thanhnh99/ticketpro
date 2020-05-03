@@ -121,7 +121,11 @@
 											<li><a href="{{Route('home')}}">Trang chủ</a></li>
 											<li><a href="#">Âm nhạc</a></li>
 											<li><a href="#">Thể thao</a></li>
+<<<<<<< HEAD
 											<li class=""><a href="#">Hội nghị</a></li>
+=======
+											<li><a href="#">Hội nghị</a></li>
+>>>>>>> 91307bf2cfc4ffa066f90e31186beb6b6822494a
 											<li><a href="#">Về chúng tôi</a></li>
 										</ul>
 									</nav>
