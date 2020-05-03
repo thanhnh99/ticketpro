@@ -36,7 +36,7 @@ class PaymentController extends Controller
         $vnp_TmnCode = "G2XY7630"; //Mã website tại VNPAY 
         $vnp_HashSecret = "MNPSFPIMPREYRRIHARQAOEZYNGTMGLBI"; //Chuỗi bí mật
         $vnp_Url = "http://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        $vnp_Returnurl = "http://localhost/vnpay-return";
+        $vnp_Returnurl = "https://ticketpro1.herokuapp.com/vnpay-return";
         
         $event = Event::where("id",$eventId)->first()->get();
 
