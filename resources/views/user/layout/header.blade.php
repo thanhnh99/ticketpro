@@ -19,7 +19,7 @@
 				<li class="menu_item"><a href="#">Âm nhạc</a></li>
 				<li class="menu_item"><a href="#">Thể thao</a></li>
 				<li class="menu_item"><a href="#">Hội nghị</a></li>
-				<li class="menu_item"><a href="news.html">Về chúng tôi</a></li>
+				<li class="menu_item"><a href="#">Về chúng tôi</a></li>
 			</ul>
         </div>
 		<div class="menu_social"> 
@@ -120,7 +120,7 @@
 										<ul>
 											<li><a href="{{Route('home')}}">Trang chủ</a></li>
 											<li><a href="#">Âm nhạc</a></li>
-											<li><a href="speakers.html">Thể thao</a></li>
+											<li><a href="#">Thể thao</a></li>
 											<li class=""><a href="#">Hội nghị</a></li>
 											<li><a href="#">Về chúng tôi</a></li>
 										</ul>
